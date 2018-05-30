@@ -1,0 +1,6 @@
+org\libmgmt\model\User.class
+org\libmgmt\dao\BookDao.class
+org\libmgmt\controller\BookController.class
+org\libmgmt\model\Book.class
+org\libmgmt\dao\BookDaoImpl.class
+org\libmgmt\model\BookBorrower.class
