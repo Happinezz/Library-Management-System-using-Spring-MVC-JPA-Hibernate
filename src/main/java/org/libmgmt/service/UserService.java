@@ -6,14 +6,16 @@ import org.libmgmt.model.User;
 
 public interface UserService {
 
-	User addUser(User user);
+	User addUser(User book);
 
-	User updateUser(User user);
+	User updateUser(User book);
 
-	Integer deleteUser(Integer userId);
+	Integer deleteUser(Integer bookId);
 
 	User getUser(Integer id);
 
 	List<User> listUsers();
+
+	List<User> searchUser(String propertyName, String value);
 
 }

@@ -1,13 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<title>Add Book Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Book Details</title>
 </head>
 <body>
-	<h3>Add New Book</h3>
-	<form:form method="POST" commandName="book" action="add">
+	<form:form method="POST" commandName="book"
+		action="${pageContext.request.contextPath}/book/update">
 		<table>
+			<tr>
+				<td>Id:</td>
+				<td><form:input path="id" readonly="true" /></td>
+			</tr>
 			<tr>
 				<td>ISBN:</td>
 				<td><form:input path="isbn" /></td>
@@ -34,7 +44,7 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><input type="submit" value="Save" /></td>
+				<td><input type="submit" value="Update" /></td>
 			</tr>
 		</table>
 	</form:form>

@@ -16,7 +16,7 @@
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 	<context:component-scan base-package="org.libmgmt" />
@@ -50,7 +50,15 @@
 		</property>
 	</bean>
 
-	<bean id="BookDaoImpl" class="org.libmgmt.dao.BookDaoImpl">
+	<bean id="BookDao" class="org.libmgmt.dao.BookDao">
+		<property name="entityManager" ref="entityManagerFactory"></property>
+	</bean>
+
+	<bean id="UserDao" class="org.libmgmt.dao.UserDao">
+		<property name="entityManager" ref="entityManagerFactory"></property>
+	</bean>
+
+	<bean id="BookBorrowerDao" class="org.libmgmt.dao.BookBorrowerDao">
 		<property name="entityManager" ref="entityManagerFactory"></property>
 	</bean>
 

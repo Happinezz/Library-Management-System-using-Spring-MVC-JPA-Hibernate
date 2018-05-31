@@ -1,49 +1,71 @@
 package org.libmgmt.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "User")
 public class User {
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userId;
+	private Integer id;
 
-	@Column(name = "username", nullable = false)
-	private String username;
-
-	@Column(name = "password", nullable = false)
-	private String password;
+	@Column(name = "name", nullable = false)
+	private String name;
 
 	@Column(name = "email", nullable = false)
 	private String email;
 
+	@Column(name = "contact_no", nullable = false)
+	private String contactNo;
+
+	@Column(name = "password", nullable = false)
+	private String password;
+
 	public User() {
 	}
 
-	public User(Integer userId, String username, String password, String email) {
-		this.userId = userId;
-		this.username = username;
-		this.password = password;
+	public User(Integer userId) {
+		this.id = userId;
+	}
+
+	public User(Integer id, String name, String email, String contactNo, String password) {
+		super();
+		this.id = id;
+		this.name = name;
 		this.email = email;
+		this.contactNo = contactNo;
+		this.password = password;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public String getName() {
+		return name;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getContactNo() {
+		return contactNo;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setContactNo(String contacNo) {
+		this.contactNo = contacNo;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getPassword() {

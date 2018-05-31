@@ -3,20 +3,25 @@ package org.libmgmt.service;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 
 import org.libmgmt.dao.UserDao;
 import org.libmgmt.model.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+/**
+ * Can contain business logic and @Transactional because there can be multiple
+ * objects to be updated.
+ * 
+ * @author Karan
+ *
+ */
+
+@Service("UserService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
-	@Resource(name = "UserDaoImpl")
+	@Resource(name = "UserDao")
 	UserDao userDao;
 
 	public User addUser(User user) {
@@ -33,6 +38,10 @@ public class UserServiceImpl implements UserService {
 
 	public User getUser(Integer id) {
 		return userDao.getUser(id);
+	}
+
+	public List<User> searchUser(String propertyName, String value) {
+		return userDao.searchUser(propertyName, value);
 	}
 
 	public List<User> listUsers() {

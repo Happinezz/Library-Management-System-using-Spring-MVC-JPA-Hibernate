@@ -15,4 +15,7 @@ public interface BookService {
 	Book getBook(Integer id);
 
 	List<Book> listBooks();
+
+	List<Book> searchBook(String propertyName, String value);
+
 }
