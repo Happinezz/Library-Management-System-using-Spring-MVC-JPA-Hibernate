@@ -11,12 +11,15 @@
 <title>User Details</title>
 </head>
 <body>
+	<a href="${pageContext.request.contextPath}/UserManagement.jsp">Users
+		Home</a>
+	<h3>User Details</h3>
 	<form:form method="POST" commandName="user"
 		action="${pageContext.request.contextPath}/user/update">
 		<table>
 			<tr>
 				<td>Id:</td>
-				<td><form:input path="id" readonly="true"/></td>
+				<td><form:input path="id" readonly="true" /></td>
 			</tr>
 			<tr>
 				<td>Name:</td>

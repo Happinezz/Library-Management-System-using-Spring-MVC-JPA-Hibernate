@@ -3,7 +3,11 @@
 <title>User Management</title>
 </head>
 <body>
+	<h3>User Management</h3>
 	<table>
+		<tr>
+			<td><a href="./index.jsp">Home</a></td>
+		</tr>
 		<tr>
 			<td><a href="${pageContext.request.contextPath}/user/add">Add
 					User</a></td>

@@ -66,7 +66,7 @@ public class BookController {
 	}
 
 	private ModelAndView redirectToBookManagement() {
-		return new ModelAndView("redirect:/BookBorrowerManagement.jsp");
+		return new ModelAndView("redirect:/BookManagement.jsp");
 	}
 
 	private ModelAndView redirectToBookList(List<Book> books) {

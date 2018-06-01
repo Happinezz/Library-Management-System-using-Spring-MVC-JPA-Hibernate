@@ -25,11 +25,23 @@ public class BookServiceImpl implements BookService {
 	BookDao bookDao;
 
 	public Book addBook(Book book) {
+		book.setAvailableCopies(book.getTotalCopies());
 		return bookDao.addBook(book);
 	}
 
-	public Book updateBook(Book book) {
-		return bookDao.updateBook(book);
+	public Book updateBook(Book modifiedBook) {
+		Book originalData = bookDao.getBook(modifiedBook.getId());
+		if (originalData.getTotalCopies() != modifiedBook.getTotalCopies()) {
+			Integer modifiedTotalCopies = modifiedBook.getTotalCopies();
+			Integer currentlyBorrowedCopies = originalData.getTotalCopies() - originalData.getAvailableCopies();
+			if (modifiedTotalCopies < currentlyBorrowedCopies) {
+				throw new Error("Total copies can not be updated because you are trying to update total copies to: "
+						+ modifiedTotalCopies + " and currently borrowed copies: " + currentlyBorrowedCopies);
+			}
+			modifiedBook.setAvailableCopies(
+					modifiedBook.getAvailableCopies() - (originalData.getTotalCopies() - modifiedTotalCopies));
+		}
+		return bookDao.updateBook(modifiedBook);
 	}
 
 	public Integer deleteBook(Integer bookId) {

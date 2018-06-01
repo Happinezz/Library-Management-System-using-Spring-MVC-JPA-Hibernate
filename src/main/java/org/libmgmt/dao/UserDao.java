@@ -11,10 +11,10 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.libmgmt.model.Book;
 import org.libmgmt.model.User;
-import org.springframework.stereotype.Component;
+import org.libmgmt.utility.QueryBuilderUtility;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class UserDao {
@@ -29,7 +29,12 @@ public class UserDao {
 		entityManager = entityManagerFactory.createEntityManager();
 	}
 
-	@Transactional
+	/**
+	 * Adds the user
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public User addUser(User user) {
 		entityManager.getTransaction().begin();
 		entityManager.persist(user);
@@ -38,7 +43,12 @@ public class UserDao {
 		return user;
 	}
 
-	@Transactional
+	/**
+	 * Updates the user
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public User updateUser(User user) {
 		entityManager.getTransaction().begin();
 		user = entityManager.merge(user);
@@ -46,7 +56,12 @@ public class UserDao {
 		return user;
 	}
 
-	@Transactional
+	/**
+	 * Deletes the user
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Integer deleteUser(Integer userId) {
 		entityManager.getTransaction().begin();
 		entityManager.remove(entityManager.find(User.class, userId));
@@ -54,10 +69,21 @@ public class UserDao {
 		return userId;
 	}
 
-	public User getUser(Integer id) {
-		return entityManager.find(User.class, id);
+	/**
+	 * Returns the user-details for given user-id
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public User getUser(Integer userId) {
+		return entityManager.find(User.class, userId);
 	}
 
+	/**
+	 * Returns the list of users
+	 * 
+	 * @return
+	 */
 	public List<User> listUsers() {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<User> query = cb.createQuery(User.class);
@@ -65,12 +91,20 @@ public class UserDao {
 		return entityManager.createQuery(query).getResultList();
 	}
 
+	/**
+	 * Searches the book for given propertyName having given value and returns
+	 * the matching list
+	 * 
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
 	public List<User> searchUser(String propertyName, String value) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<User> query = cb.createQuery(User.class);
 		Root<User> root = query.from(User.class);
-		Path path = root.get(propertyName);
-		Predicate predicate = cb.like(cb.lower(path), "%" + value + "%");
+		Predicate predicate = cb.like(cb.lower(QueryBuilderUtility.<User>getPropertyPath(root, propertyName)),
+				"%" + value.toLowerCase() + "%");
 		query.where(predicate);
 		return entityManager.createQuery(query).getResultList();
 	}

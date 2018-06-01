@@ -4,18 +4,61 @@ import java.util.List;
 
 import org.libmgmt.model.User;
 
+/**
+ * Provides the services for all the user related operations
+ * 
+ * @author Karan
+ *
+ */
 public interface UserService {
 
-	User addUser(User book);
+	/**
+	 * Adds new user
+	 * 
+	 * @param user
+	 * @return
+	 */
+	User addUser(User user);
 
-	User updateUser(User book);
+	/**
+	 * Updates the user
+	 * 
+	 * @param user
+	 * @return
+	 */
+	User updateUser(User user);
 
-	Integer deleteUser(Integer bookId);
+	/**
+	 * Deletes the user
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	Integer deleteUser(Integer userId);
 
+	/**
+	 * Fetches the user details
+	 * 
+	 * @param id
+	 * @return
+	 */
 	User getUser(Integer id);
 
+	/**
+	 * Returns the list of all users.
+	 * 
+	 * @return
+	 */
 	List<User> listUsers();
 
+	/**
+	 * Searches the user with given propertyName having given value and returns
+	 * the list of matching users.
+	 * 
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
 	List<User> searchUser(String propertyName, String value);
 
 }

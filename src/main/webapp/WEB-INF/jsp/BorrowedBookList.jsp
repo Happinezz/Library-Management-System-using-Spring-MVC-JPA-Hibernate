@@ -10,6 +10,9 @@
 <title>User List</title>
 </head>
 <body>
+	<a href="${pageContext.request.contextPath}/BookBorrowerManagement.jsp">Books
+		Borrower Home</a>
+	<h3>Borrowed Books List</h3>
 	<form:form method="GET" action="search">
 		<table>
 			<tr>

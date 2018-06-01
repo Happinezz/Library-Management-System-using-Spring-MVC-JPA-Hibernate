@@ -6,112 +6,117 @@ import javax.persistence.*;
 @Table(name = "Book")
 public class Book {
 
-    @Id
-    @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @Column(name = "isbn", nullable = false, unique = true)
-    private String isbn;
+	@Column(name = "isbn", nullable = false, unique = true)
+	private String isbn;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+	@Column(name = "title", nullable = false)
+	private String title;
 
-    @Column(name = "author", nullable = false)
-    private String author;
+	@Column(name = "author", nullable = false)
+	private String author;
 
-    @Column(name = "publisher", nullable = false)
-    private String publisher;
+	@Column(name = "publisher", nullable = false)
+	private String publisher;
 
-    @Column(name = "qty", nullable = false)
-    private Integer qty;
+	@Column(name = "totalCopies", nullable = false)
+	private Integer totalCopies;
 
-    @Column(name = "price", nullable = false)
-    private Integer price;
+	@Column(name = "availableCopies", nullable = false)
+	private Integer availableCopies;
 
-    public Book() {
-    }
-    
-    public Book(Integer bookId){
-    	this.id = bookId;
-    }
+	@Column(name = "price", nullable = false)
+	private Integer price;
 
-    public Book(Integer id, String isbn, String title, String author, String publisher, Integer qty, Integer price) {
-        this.id = id;
-        this.isbn = isbn;
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.qty = qty;
-        this.price = price;
-    }
+	public Book() {
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Book(Integer bookId) {
+		this.id = bookId;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Book(Integer id, String isbn, String title, String author, String publisher, Integer totalCopies,
+			Integer price) {
+		this.id = id;
+		this.isbn = isbn;
+		this.title = title;
+		this.author = author;
+		this.publisher = publisher;
+		this.totalCopies = totalCopies;
+		this.price = price;
+	}
 
-    public String getIsbn() {
-        return isbn;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getIsbn() {
+		return isbn;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
 
-    public String getAuthor() {
-        return author;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getPublisher() {
-        return publisher;
-    }
+	public String getAuthor() {
+		return author;
+	}
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 
-    public Integer getQty() {
-        return qty;
-    }
+	public String getPublisher() {
+		return publisher;
+	}
 
-    public void setQty(Integer qty) {
-        this.qty = qty;
-    }
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
 
-    public Integer getPrice() {
-        return price;
-    }
+	public Integer getTotalCopies() {
+		return totalCopies;
+	}
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
+	public void setTotalCopies(Integer totalCopies) {
+		this.totalCopies = totalCopies;
+	}
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", isbn='" + isbn + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", publisher='" + publisher + '\'' +
-                ", qty=" + qty +
-                ", price=" + price +
-                '}';
-    }
+	public Integer getAvailableCopies() {
+		return availableCopies;
+	}
+
+	public void setAvailableCopies(Integer availableCopies) {
+		this.availableCopies = availableCopies;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
+	@Override
+	public String toString() {
+		return "Book{" + "id=" + id + ", isbn='" + isbn + '\'' + ", title='" + title + '\'' + ", author='" + author
+				+ '\'' + ", publisher='" + publisher + '\'' + ", qty=" + totalCopies + ", price=" + price + '}';
+	}
 }

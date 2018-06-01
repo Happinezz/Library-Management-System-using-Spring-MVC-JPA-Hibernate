@@ -3,6 +3,7 @@
 <title>Library Management</title>
 </head>
 <body>
+	<h3>Home</h3>
 	<table>
 		<tr>
 			<td><a href="./BookManagement.jsp">Manage Books</a></td>

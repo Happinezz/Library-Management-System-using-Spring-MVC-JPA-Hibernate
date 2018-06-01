@@ -10,6 +10,9 @@
 <title>Book List</title>
 </head>
 <body>
+	<a href="${pageContext.request.contextPath}/BookManagement.jsp">Books
+		Home</a>
+	<h3>Books List</h3>
 	<form:form method="GET" action="search">
 		<table>
 			<tr>
@@ -39,7 +42,8 @@
 			<td>Title</td>
 			<td>Author</td>
 			<td>Publisher</td>
-			<td>Quantity</td>
+			<td>Total Copies</td>
+			<td>Available Copies</td>
 			<td>Price</td>
 		</tr>
 		<c:forEach items="${books}" var="book">
@@ -49,13 +53,19 @@
 				<td>${book.title}</td>
 				<td>${book.author}</td>
 				<td>${book.publisher}</td>
-				<td>${book.qty}</td>
+				<td>${book.totalCopies}</td>
+				<td>${book.availableCopies}</td>
 				<td>${book.price}</td>
 				<td><a
 					href="${pageContext.request.contextPath}/book/get/${book.id}">View/Edit</a>
 				</td>
-				<td><a
-					href="${pageContext.request.contextPath}/bookborrow/issueBook?bookId=${book.id}&userId=1">Borrow</a>
+				<td>
+					<form method="post"
+						action="${pageContext.request.contextPath}/bookborrow/issueBook">
+						<input type="hidden" name="bookId" value="${book.id}" /> UserId:
+						<input type="text" name="userId" /> <input type="submit"
+							value="Borrow" />
+					</form>
 				</td>
 				<td><a
 					href="${pageContext.request.contextPath}/book/delete/${book.id}">Delete</a></td>

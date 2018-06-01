@@ -5,6 +5,8 @@
 <title>Book Management</title>
 </head>
 <body>
+	<a href="${pageContext.request.contextPath}/BookManagement.jsp">Books
+		Home</a>
 	<h3>Add New Book</h3>
 	<form:form method="POST" commandName="book" action="add">
 		<table>
@@ -25,8 +27,8 @@
 				<td><form:input path="publisher" /></td>
 			</tr>
 			<tr>
-				<td>Quantity:</td>
-				<td><form:input path="qty" /></td>
+				<td>Total Copies:</td>
+				<td><form:input path="totalCopies" /></td>
 			</tr>
 			<tr>
 				<td>Price:</td>
