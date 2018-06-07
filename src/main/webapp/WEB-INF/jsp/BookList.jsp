@@ -59,14 +59,6 @@
 				<td><a
 					href="${pageContext.request.contextPath}/book/get/${book.id}">View/Edit</a>
 				</td>
-				<td>
-					<form method="post"
-						action="${pageContext.request.contextPath}/bookborrow/issueBook">
-						<input type="hidden" name="bookId" value="${book.id}" /> UserId:
-						<input type="text" name="userId" /> <input type="submit"
-							value="Borrow" />
-					</form>
-				</td>
 				<td><a
 					href="${pageContext.request.contextPath}/book/delete/${book.id}">Delete</a></td>
 			</tr>

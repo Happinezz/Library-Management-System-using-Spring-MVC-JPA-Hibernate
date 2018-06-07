@@ -11,7 +11,7 @@
 <title>User Details</title>
 </head>
 <body>
-	<a href="${pageContext.request.contextPath}/UserManagement.jsp">Users
+	<a href="${pageContext.request.contextPath}">Users
 		Home</a>
 	<h3>User Details</h3>
 	<form:form method="POST" commandName="user"

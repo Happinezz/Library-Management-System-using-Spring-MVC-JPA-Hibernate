@@ -1,10 +1,15 @@
 package org.libmgmt.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,14 +24,20 @@ public class User {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true, length = 40)
 	private String email;
 
 	@Column(name = "contact_no", nullable = false)
 	private String contactNo;
 
-	@Column(name = "password", nullable = false)
+	@Column(name = "password", nullable = false, length = 100)
 	private String password;
+
+	@Column(name = "enabled", nullable = false)
+	private Boolean enabled;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+	private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
 	public User() {
 	}
@@ -35,13 +46,32 @@ public class User {
 		this.id = userId;
 	}
 
-	public User(Integer id, String name, String email, String contactNo, String password) {
+	public User(Integer id, String name, String email, String contactNo, String password, boolean enabled,
+			Set<UserRole> userRole) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.contactNo = contactNo;
 		this.password = password;
+		this.enabled = enabled;
+		this.userRole = userRole;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Set<UserRole> getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(Set<UserRole> userRole) {
+		this.userRole = userRole;
 	}
 
 	public String getName() {

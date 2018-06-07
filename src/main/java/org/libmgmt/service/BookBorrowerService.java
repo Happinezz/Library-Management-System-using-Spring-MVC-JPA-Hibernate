@@ -18,10 +18,10 @@ public interface BookBorrowerService {
 	 * copies and issues the book
 	 * 
 	 * @param bookId
-	 * @param userId
+	 * @param userName
 	 * @return
 	 */
-	BookBorrower issueBook(Integer bookId, Integer userId);
+	BookBorrower issueBook(Integer bookId, String userName);
 
 	/**
 	 * Increment the count of available copies and add entry for book-returns
@@ -69,5 +69,9 @@ public interface BookBorrowerService {
 	 * @return
 	 */
 	List<BookBorrower> listReturnedBooks();
+	
+	List<BookBorrower> listHistoryByUser(String email);
+	
+	List<BookBorrower> listBorrowedBooksByUser(String email);
 
 }

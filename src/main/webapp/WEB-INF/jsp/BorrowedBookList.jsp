@@ -10,8 +10,7 @@
 <title>User List</title>
 </head>
 <body>
-	<a href="${pageContext.request.contextPath}/BookBorrowerManagement.jsp">Books
-		Borrower Home</a>
+	<a href="${pageContext.request.contextPath}">User Home</a>
 	<h3>Borrowed Books List</h3>
 	<form:form method="GET" action="search">
 		<table>
@@ -56,9 +55,11 @@
 				<td>${bookBorrow.issueDate}</td>
 				<td>${bookBorrow.returnDate}</td>
 				<td>${bookBorrow.dueDate}</td>
-				<td><a
-					href="${pageContext.request.contextPath}/bookborrow/returnBook?id=${bookBorrow.id}">Return
-						Book</a></td>
+				<c:if test="${empty bookBorrow.returnDate}">
+					<td><a
+						href="${pageContext.request.contextPath}/bookborrow/returnBook?id=${bookBorrow.id}">Return
+							Book</a></td>
+				</c:if>
 			</tr>
 		</c:forEach>
 	</table>

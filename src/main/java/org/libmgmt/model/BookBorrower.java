@@ -13,11 +13,11 @@ public class BookBorrower {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name="bookId")
+	@JoinColumn(name = "bookId", referencedColumnName = "id")
 	private Book bookId;
 
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User userId;
 
 	@Column(name = "issue_date", nullable = false)

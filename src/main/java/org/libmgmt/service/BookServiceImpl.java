@@ -2,10 +2,11 @@ package org.libmgmt.service;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.libmgmt.dao.BookDao;
+import org.libmgmt.dao.UserDao;
 import org.libmgmt.model.Book;
+import org.libmgmt.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +22,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BookServiceImpl implements BookService {
 
-	@Resource(name = "BookDao")
+	@Autowired
 	BookDao bookDao;
 
-	public Book addBook(Book book) {
+	@Autowired
+	UserDao userDao;
+
+	public Book addBook(Book book, String ownerEmail) {
 		book.setAvailableCopies(book.getTotalCopies());
-		return bookDao.addBook(book);
+		User owner = userDao.findByUserName(ownerEmail);
+		book.setBookOwner(owner);
+		return bookDao.create(book);
 	}
 
 	public Book updateBook(Book modifiedBook) {
-		Book originalData = bookDao.getBook(modifiedBook.getId());
+		Book originalData = bookDao.read(modifiedBook.getId());
+		modifiedBook.setBookOwner(originalData.getBookOwner());
 		if (originalData.getTotalCopies() != modifiedBook.getTotalCopies()) {
 			Integer modifiedTotalCopies = modifiedBook.getTotalCopies();
 			Integer currentlyBorrowedCopies = originalData.getTotalCopies() - originalData.getAvailableCopies();
@@ -41,23 +48,31 @@ public class BookServiceImpl implements BookService {
 			modifiedBook.setAvailableCopies(
 					modifiedBook.getAvailableCopies() - (originalData.getTotalCopies() - modifiedTotalCopies));
 		}
-		return bookDao.updateBook(modifiedBook);
+		return bookDao.update(modifiedBook);
 	}
 
 	public Integer deleteBook(Integer bookId) {
-		return bookDao.deleteBook(bookId);
+		return bookDao.delete(bookId);
 	}
 
 	public Book getBook(Integer id) {
-		return bookDao.getBook(id);
+		return bookDao.read(id);
 	}
 
 	public List<Book> searchBook(String propertyName, String value) {
-		return bookDao.searchBook(propertyName, value);
+		return bookDao.search(propertyName, value);
 	}
 
 	public List<Book> listBooks() {
-		return bookDao.listBooks();
+		return bookDao.list();
+	}
+
+	public List<Book> getAvailableBookList() {
+		return bookDao.getAvailablBookList();
+	}
+
+	public List<Book> searchAvailableBook(String propertyName, String value) {
+		return bookDao.searchAvailableBook(propertyName, value);
 	}
 
 }

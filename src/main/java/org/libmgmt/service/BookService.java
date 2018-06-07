@@ -19,7 +19,7 @@ public interface BookService {
 	 * @param book
 	 * @return
 	 */
-	Book addBook(Book book);
+	Book addBook(Book book, String ownerEmail);
 
 	/**
 	 * Updates the book
@@ -51,6 +51,15 @@ public interface BookService {
 	 * @return
 	 */
 	List<Book> listBooks();
+
+	/**
+	 * Returns the list of available books only
+	 * 
+	 * @return
+	 */
+	List<Book> getAvailableBookList();
+
+	List<Book> searchAvailableBook(String propertyName, String value);
 
 	/**
 	 * Searches the books for provided <code>propertyName</code> having provided

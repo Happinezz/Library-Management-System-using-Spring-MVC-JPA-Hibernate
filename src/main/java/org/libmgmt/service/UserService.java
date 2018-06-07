@@ -3,6 +3,9 @@ package org.libmgmt.service;
 import java.util.List;
 
 import org.libmgmt.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * Provides the services for all the user related operations
@@ -10,7 +13,7 @@ import org.libmgmt.model.User;
  * @author Karan
  *
  */
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
 	/**
 	 * Adds new user
@@ -60,5 +63,7 @@ public interface UserService {
 	 * @return
 	 */
 	List<User> searchUser(String propertyName, String value);
+
+	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
 }

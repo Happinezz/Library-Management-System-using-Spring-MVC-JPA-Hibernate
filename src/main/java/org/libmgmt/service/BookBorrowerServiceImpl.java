@@ -4,13 +4,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.libmgmt.dao.BookBorrowerDao;
 import org.libmgmt.dao.BookDao;
+import org.libmgmt.dao.UserDao;
 import org.libmgmt.model.Book;
 import org.libmgmt.model.BookBorrower;
-import org.libmgmt.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +25,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BookBorrowerServiceImpl implements BookBorrowerService {
 
-	@Resource(name = "BookBorrowerDao")
+	@Autowired
 	BookBorrowerDao bookBorrowerDao;
 
-	@Resource(name = "BookDao")
+	@Autowired
 	BookDao bookDao;
 
-	public BookBorrower issueBook(Integer bookId, Integer userId) {
+	@Autowired
+	UserDao userDao;
+
+	public BookBorrower issueBook(Integer bookId, String userName) {
 		// Prepare Book Borrower Object
 		// Due Date will be after 15 days of Issue Date
 		Calendar calendar = Calendar.getInstance();
@@ -41,37 +43,53 @@ public class BookBorrowerServiceImpl implements BookBorrowerService {
 		Date dueDate = calendar.getTime();
 		BookBorrower bookBorrower = new BookBorrower();
 		bookBorrower.setBookId(new Book(bookId));
-		bookBorrower.setUserId(new User(userId));
+		bookBorrower.setUserId(userDao.findByUserName(userName));
 		bookBorrower.setIssueDate(issueDate);
 		bookBorrower.setDueDate(dueDate);
 
-		bookDao.decrementAvailableCopyCount(bookBorrower.getBookId().getId());
-		return bookBorrowerDao.issueBook(bookBorrower);
+		Book book = bookDao.read(bookId);
+		if (book.getAvailableCopies() < 1) {
+			// TODO Exception Handling
+			throw new Error("Book is not available");
+		}
+		book.setAvailableCopies(book.getAvailableCopies() - 1);
+		book = bookDao.update(book);
+		return bookBorrowerDao.create(bookBorrower);
 	}
 
 	public BookBorrower returnBook(BookBorrower bookBorrower) {
-		bookDao.incrementAvailableCopyCount(bookBorrower.getBookId().getId());
-		return bookBorrowerDao.returnBook(bookBorrower);
+		Book book = bookDao.read(bookBorrower.getBookId().getId());
+		book.setAvailableCopies(book.getAvailableCopies() + 1);
+		book = bookDao.update(book);
+		return bookBorrowerDao.update(bookBorrower);
 	}
 
 	public BookBorrower getBookBorrower(Integer id) {
-		return bookBorrowerDao.getBookBorrower(id);
+		return bookBorrowerDao.read(id);
 	}
 
 	public List<BookBorrower> listBookBorrowers() {
-		return bookBorrowerDao.listBookBorrowers();
+		return bookBorrowerDao.list();
 	}
 
 	public List<BookBorrower> searchBookBorrowerDetails(String propertyName, String value) {
-		return bookBorrowerDao.searchBookBorrowerDetails(propertyName, value);
+		return bookBorrowerDao.search(propertyName, value);
 	}
 
 	public List<BookBorrower> listBorrowedBooks() {
-		return bookBorrowerDao.listBorrowedBooks();
+		return bookBorrowerDao.listOnlyBorrowedBooks();
 	}
 
 	public List<BookBorrower> listReturnedBooks() {
-		return bookBorrowerDao.listReturnedBooks();
+		return bookBorrowerDao.listOnlyReturnedBooks();
+	}
+
+	public List<BookBorrower> listHistoryByUser(String email) {
+		return bookBorrowerDao.listHistoryByUser(userDao.findByUserName(email).getId());
+	}
+
+	public List<BookBorrower> listBorrowedBooksByUser(String email) {
+		return bookBorrowerDao.listBorrowedBooksByUser(userDao.findByUserName(email).getId());
 	}
 
 }

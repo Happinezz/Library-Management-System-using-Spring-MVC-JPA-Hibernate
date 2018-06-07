@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.libmgmt.model.BookBorrower;
 import org.libmgmt.service.BookBorrowerService;
+import org.libmgmt.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,15 +31,11 @@ public class BookBorrowerController {
 	 * @param id
 	 * @return
 	 */
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_ADMIN)
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	public ModelAndView getBookBorrower(@PathVariable("id") Integer id) {
 		BookBorrower bookBorrower = bookBorrowerService.getBookBorrower(id);
 		return new ModelAndView("displayBookBorrower", "bookBorrower", bookBorrower);
-	}
-
-	@RequestMapping(value = "/issueBook", method = RequestMethod.GET)
-	public ModelAndView showForm() {
-		return new ModelAndView("addBookBorrower", "bookBorrower", new BookBorrower());
 	}
 
 	/**
@@ -47,13 +45,14 @@ public class BookBorrowerController {
 	 * @param resp
 	 * @return
 	 */
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
 	@RequestMapping(value = "/returnBook", method = RequestMethod.GET)
 	public ModelAndView returnBook(HttpServletRequest req, HttpServletResponse resp) {
 		int id = Integer.parseInt(req.getParameter("id"));
 		BookBorrower bookBorrower = bookBorrowerService.getBookBorrower(id);
 		bookBorrower.setReturnDate(Calendar.getInstance().getTime());
 		bookBorrowerService.returnBook(bookBorrower);
-		return redirectToBookManagement();
+		return redirectToUserHome();
 	}
 
 	/**
@@ -63,14 +62,16 @@ public class BookBorrowerController {
 	 * @param resp
 	 * @return
 	 */
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
 	@RequestMapping(value = "/issueBook", method = RequestMethod.POST)
 	public ModelAndView issueBook(HttpServletRequest req, HttpServletResponse resp) {
 		int bookId = Integer.parseInt(req.getParameter("bookId"));
-		int userId = Integer.parseInt(req.getParameter("userId"));
-		bookBorrowerService.issueBook(bookId, userId);
-		return redirectToBookManagement();
+		String userName = req.getUserPrincipal().getName();
+		bookBorrowerService.issueBook(bookId, userName);
+		return redirectToUserHome();
 	}
 
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_ADMIN)
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView searchBook(HttpServletRequest req, HttpServletResponse resp) {
 		String propertyName = req.getParameter("property");
@@ -84,9 +85,16 @@ public class BookBorrowerController {
 	 * 
 	 * @return
 	 */
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView listBookBorrowerHistory() {
-		List<BookBorrower> books = bookBorrowerService.listBookBorrowers();
+	public ModelAndView listBookBorrowerHistory(HttpServletRequest req, HttpServletResponse resp) {
+		List<BookBorrower> books = null;
+		if (req.isUserInRole(Constants.HAS_ROLE_ROLE_ADMIN)) {
+			books = bookBorrowerService.listBookBorrowers();
+		} else {
+			String email = req.getUserPrincipal().getName();
+			books = bookBorrowerService.listHistoryByUser(email);
+		}
 		return redirectToBookList(books);
 	}
 
@@ -96,9 +104,16 @@ public class BookBorrowerController {
 	 * 
 	 * @return
 	 */
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
 	@RequestMapping(value = "/listBorrowedBook", method = RequestMethod.GET)
-	public ModelAndView listBorrowedBook() {
-		List<BookBorrower> books = bookBorrowerService.listBorrowedBooks();
+	public ModelAndView listBorrowedBook(HttpServletRequest req, HttpServletResponse resp) {
+		List<BookBorrower> books = null;
+		if (req.isUserInRole(Constants.HAS_ROLE_ROLE_ADMIN)) {
+			books = bookBorrowerService.listBorrowedBooks();
+		} else {
+			String email = req.getUserPrincipal().getName();
+			books = bookBorrowerService.listBorrowedBooksByUser(email);
+		}
 		return redirectToBookList(books);
 	}
 
@@ -108,6 +123,7 @@ public class BookBorrowerController {
 	 * 
 	 * @return
 	 */
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_ADMIN)
 	@RequestMapping(value = "/listReturnedBook", method = RequestMethod.GET)
 	public ModelAndView listReturnedBook() {
 		List<BookBorrower> books = bookBorrowerService.listReturnedBooks();
@@ -119,8 +135,9 @@ public class BookBorrowerController {
 	 * 
 	 * @return
 	 */
-	private ModelAndView redirectToBookManagement() {
-		return new ModelAndView("redirect:/BookBorrowerManagement.jsp");
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
+	private ModelAndView redirectToUserHome() {
+		return new ModelAndView("user_home");
 	}
 
 	/**
@@ -129,6 +146,7 @@ public class BookBorrowerController {
 	 * @param bookBorrowList
 	 * @return
 	 */
+	@PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
 	private ModelAndView redirectToBookList(List<BookBorrower> bookBorrowList) {
 		return new ModelAndView("BorrowedBookList", "bookBorrowList", bookBorrowList);
 	}

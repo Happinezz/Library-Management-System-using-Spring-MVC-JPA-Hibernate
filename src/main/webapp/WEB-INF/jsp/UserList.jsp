@@ -12,7 +12,7 @@
 <body>
 	<a href="${pageContext.request.contextPath}/UserManagement.jsp">Users
 		Home</a>
-	<h3>Books List</h3>
+	<h3>Users List</h3>
 	<form:form method="GET" action="search">
 		<table>
 			<tr>

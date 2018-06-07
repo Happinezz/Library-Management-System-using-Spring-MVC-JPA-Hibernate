@@ -2,6 +2,7 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
     http://www.springframework.org/schema/aop
@@ -9,33 +10,44 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
     http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd
     http://www.springframework.org/schema/mvc
-    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+    http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- AOP -->
+	<aop:aspectj-autoproxy />
+	<bean id="logAspect" class="org.libmgmt.aspect.LoggingAspect" />
 
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
-
+	<!-- Scan annotations and register beans -->
 	<context:component-scan base-package="org.libmgmt" />
 
+	<!-- View URL Pattern -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/library_db" />
-		<property name="username" value="root" />
+	<!-- Creating c3p0 pool data-source -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/library_db" />
+		<property name="user" value="root" />
 		<property name="password" value="root" />
+
+		<!-- c3p0 properties -->
+		<property name="acquireIncrement" value="1" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="5" />
+		<property name="maxIdleTime" value="600" />
+		<property name="testConnectionOnCheckout" value="true" />
 	</bean>
 
-	<bean id="entityManagerFactory"
+	<!-- EntityManagerFactory creation -->
+	<bean id="emf"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan" value="org.libmgmt.model" />
@@ -50,16 +62,11 @@
 		</property>
 	</bean>
 
-	<bean id="BookDao" class="org.libmgmt.dao.BookDao">
-		<property name="entityManager" ref="entityManagerFactory"></property>
+	<!-- transactionManger creation -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emf" />
 	</bean>
 
-	<bean id="UserDao" class="org.libmgmt.dao.UserDao">
-		<property name="entityManager" ref="entityManagerFactory"></property>
-	</bean>
-
-	<bean id="BookBorrowerDao" class="org.libmgmt.dao.BookBorrowerDao">
-		<property name="entityManager" ref="entityManagerFactory"></property>
-	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>

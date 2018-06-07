@@ -6,6 +6,8 @@ import javax.persistence.*;
 @Table(name = "Book")
 public class Book {
 
+	public static final String AVAILABLE_COPIES = "availableCopies";
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +34,10 @@ public class Book {
 	@Column(name = "price", nullable = false)
 	private Integer price;
 
+	@ManyToOne
+	@JoinColumn(name = "bookOwner", referencedColumnName = "id", nullable = false)
+	private User bookOwner;
+
 	public Book() {
 	}
 
@@ -48,6 +54,14 @@ public class Book {
 		this.publisher = publisher;
 		this.totalCopies = totalCopies;
 		this.price = price;
+	}
+
+	public User getBookOwner() {
+		return bookOwner;
+	}
+
+	public void setBookOwner(User bookOwner) {
+		this.bookOwner = bookOwner;
 	}
 
 	public Integer getId() {
@@ -116,7 +130,9 @@ public class Book {
 
 	@Override
 	public String toString() {
-		return "Book{" + "id=" + id + ", isbn='" + isbn + '\'' + ", title='" + title + '\'' + ", author='" + author
-				+ '\'' + ", publisher='" + publisher + '\'' + ", qty=" + totalCopies + ", price=" + price + '}';
+		return "Book [id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", publisher="
+				+ publisher + ", totalCopies=" + totalCopies + ", availableCopies=" + availableCopies + ", price="
+				+ price + ", bookOwner=" + bookOwner + "]";
 	}
+
 }
