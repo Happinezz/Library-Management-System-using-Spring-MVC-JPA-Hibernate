@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -32,12 +33,13 @@ public class UserController {
 		return new ModelAndView("UserDetails", "user", user);
 	}
 
-	@PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
+	// @PreAuthorize(Constants.HAS_ROLE_ROLE_USER)
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public ModelAndView getUserByEmail(HttpServletRequest req, HttpServletResponse resp) {
-		String emailId = req.getUserPrincipal().getName();
+	public @ResponseBody User getUserByEmail(HttpServletRequest req, HttpServletResponse resp) {
+		String emailId = "admin";
+		// req.getUserPrincipal().getName()
 		List<User> users = userService.searchUser(EMAIL, emailId);
-		return new ModelAndView("UserDetails", "user", users.get(0));
+		return users.get(0);
 	}
 
 	@PreAuthorize(Constants.HAS_ROLE_ROLE_ADMIN)
